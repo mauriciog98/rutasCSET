@@ -35,7 +35,7 @@ class Competencia extends Model
     protected $fillable = [
         'nombre',
         'tipo',
-        'competencia_id',
+        'programa_id',
         'codigo'
     ];
 }
