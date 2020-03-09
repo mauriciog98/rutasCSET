@@ -28,7 +28,7 @@ class CompetenciaController extends Controller
             $competenciaQuery->where('nombre', 'LIKE', '%' . $keyword . '%');
         }
 
-        return new ProgramaResource(Programa::find($programa));
+        return new ProgramaResource(Programa::find($programa)->append('programacion_resultados'));
     }
 
     /**
