@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Competencia;
 use App\Http\Resources\CompetenciaResource;
 use App\Http\Resources\ProgramaResource;
+use App\Programa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
