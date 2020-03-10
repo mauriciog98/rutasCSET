@@ -10,7 +10,7 @@ class DuracionResultado extends Model
 
     public $incrementing = false;
 
-    protected $appends = ['resultados'];
+    protected $appends = ['resultados','resultados_count'];
 
     protected $hidden = ['competencia_id'];
 
@@ -22,6 +22,11 @@ class DuracionResultado extends Model
     public function getResultadosAttribute()
     {
         return Resultado::whereIn('id',$this->resultado)->get();
+    }
+
+    public function getResultadosCountAttribute()
+    {
+        return count($this->resultado);
     }
 
     protected $casts = [

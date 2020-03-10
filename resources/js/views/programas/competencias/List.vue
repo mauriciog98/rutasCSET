@@ -167,8 +167,8 @@ export default {
               arr = arr.concat(c.programacion_resultados[index].resultados.map(item => ({
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: { ...item },
-                rowspan: c.programacion_resultados[index].resultados_count,
-                rowspanDuracion: w,
+                rowspan: c.resultados_count,
+                rowspanDuracion: c.programacion_resultados[index].resultados_count,
                 inicio: a.length ? a[a.length - 1].fin : 0,
                 fin: a.length ? a[a.length - 1].fin + c.programacion_resultados[index].resultados.length : c.programacion_resultados[index].resultados.length,
               })));

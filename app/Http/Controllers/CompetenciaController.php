@@ -26,7 +26,7 @@ class CompetenciaController extends Controller
             $competenciaQuery->where('nombre', 'LIKE', '%' . $keyword . '%');
         }
 
-        return CompetenciaResource::collection($competenciaQuery->where('programa_id',$programa)->with('resultados')->get());
+        return CompetenciaResource::collection($competenciaQuery->where('programa_id',$programa)->withCount('resultados')->get());
     }
 
     /**
