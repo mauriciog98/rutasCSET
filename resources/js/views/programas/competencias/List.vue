@@ -159,13 +159,13 @@ export default {
       });
       this.list = data.reduce((a, c) => {
         const w = 0;
-        const arr = [];
+        let arr = [];
         if (c.programacion_resultados.length > 0) {
           for (const index in c.programacion_resultados) {
             console.log(c.programacion_resultados[index]);
             if (c.programacion_resultados[index].resultados.length > 0) {
               for (const index2 in c.programacion_resultados[index].resultados) {
-                arr.concat(c.programacion_resultados[index].resultados[index2].map(item => ({
+                arr = arr.concat(c.programacion_resultados[index].resultados[index2].map(item => ({
                   competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                   resultado: { ...item },
                   rowspan: c.resultados_count,
@@ -175,7 +175,7 @@ export default {
                 })));
               }
             } else {
-              arr.concat([{
+              arr = arr.concat([{
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: {},
                 rowspan: 1,
