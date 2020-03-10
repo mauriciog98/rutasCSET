@@ -15,11 +15,8 @@ class ProgramacionResultadoResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'resultados' => ResultadoResource::collection($this->resultados->each(function ($item) {
-                $item->programado = true;
-                return $item;
-            })),
-            'resultados_count' => count($this->resultados),
+            'resultados' => ResultadoResource::collection($this->resultados),
+            'resultados_count' => $this->resultados_count,
             'duracion' => $this->duracion,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
