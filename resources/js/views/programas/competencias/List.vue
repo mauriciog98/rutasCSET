@@ -162,6 +162,7 @@ export default {
         const arr = [];
         if (c.programacion_resultados.length > 0) {
           for (const index in c.programacion_resultados) {
+            console.log(c.programacion_resultados[index]);
             if (c.programacion_resultados[index].resultados.length > 0) {
               for (const index2 in c.programacion_resultados[index].resultados) {
                 arr.concat(c.programacion_resultados[index].resultados[index2].map(item => ({
