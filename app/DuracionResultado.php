@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class DuracionResultado extends Model
 {
-    protected $primaryKey = false;
-
-    public $incrementing = false;
-
     protected $appends = ['resultados','resultados_count'];
 
     protected $hidden = ['competencia_id'];

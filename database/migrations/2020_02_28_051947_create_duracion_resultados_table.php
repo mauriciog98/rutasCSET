@@ -14,6 +14,7 @@ class CreateDuracionResultadosTable extends Migration
     public function up()
     {
         Schema::create('duracion_resultados', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->jsonb('resultados');
             $table->unsignedBigInteger('competencia_id');
             $table->unsignedInteger('duracion');

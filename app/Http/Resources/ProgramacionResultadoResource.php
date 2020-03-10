@@ -15,6 +15,7 @@ class ProgramacionResultadoResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'resultados' => ResultadoResource::collection($this->resultados),
             'resultados_count' => $this->resultados_count,
             'duracion' => $this->duracion,

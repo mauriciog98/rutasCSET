@@ -39,7 +39,14 @@
           <span>{{ scope.row.resultado.codigo + ' - ' + scope.row.resultado.nombre }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Tiempo Ejecución (horas)" />
+      <el-table-column align="center" label="Tiempo Ejecución (horas)">
+        <template v-if="scope.row.resultado.duracion" slot-scope="scope">
+          <span>{{ scope.row.resultado.duracion }}</span>
+        </template>
+        <template v-if="scope.row.resultado.editing" slot-scope="scope">
+          <el-input-number v-model="scope.row.resultado.duracion"/>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog :title="'Crear competencia'" :visible.sync="dialogFormVisible">
       <div v-loading="competenciaCreating" class="form-container">
@@ -168,7 +175,10 @@ export default {
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: { ...item },
                 rowspan: c.resultados_count,
-                rowspanDuracion: c.programacion_resultados[index].resultados_count,
+                duracion: c.programacion_resultados[index].duracion | 0,
+                selected: c.programacion_resultados[index].duracion !== null,
+                almacenado: c.programacion_resultados[index].duracion !== null,
+                rowspanDuracion: c.programacion_resultados[index].duracion !== null ? c.programacion_resultados[index].resultados_count : 1,
                 inicio: a.length ? a[a.length - 1].fin : 0,
                 fin: a.length ? a[a.length - 1].fin + c.programacion_resultados[index].resultados.length : c.programacion_resultados[index].resultados.length,
               })));
@@ -238,7 +248,7 @@ export default {
       if (row.resultado.id === undefined){
         return false;
       }
-      return !row.selected;
+      return !row.almacenado;
     },
     handleFilter() {
       this.getList();
