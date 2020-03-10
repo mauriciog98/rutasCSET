@@ -43,7 +43,7 @@
         <template v-if="scope.row.resultado.duracion" slot-scope="scope">
           <span>{{ scope.row.resultado.duracion }}</span>
         </template>
-        <template v-if="scope.row.resultado.editing" slot-scope="scope">
+        <template v-if="scope.row.resultado.editing || (!scope.row.resultado.duracion && scope.row.resultado.selected)" slot-scope="scope">
           <el-input-number v-model="scope.row.resultado.duracion" />
         </template>
       </el-table-column>
