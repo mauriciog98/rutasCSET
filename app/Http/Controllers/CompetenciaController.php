@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Competencia;
 use App\Http\Resources\CompetenciaResource;
-use App\Http\Resources\ProgramaResource;
-use App\Programa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -14,7 +12,7 @@ class CompetenciaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return ProgramaResource
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -28,7 +26,7 @@ class CompetenciaController extends Controller
             $competenciaQuery->where('nombre', 'LIKE', '%' . $keyword . '%');
         }
 
-        return new ProgramaResource(Programa::find($programa)->append('programacion_resultados'));
+        return CompetenciaResource::collection($competenciaQuery->where('programa_id',$programa)->with('resultados')->get());
     }
 
     /**
