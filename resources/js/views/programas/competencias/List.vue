@@ -44,7 +44,7 @@
           <span>{{ scope.row.resultado.duracion }}</span>
         </template>
         <template v-if="scope.row.resultado.editing" slot-scope="scope">
-          <el-input-number v-model="scope.row.resultado.duracion"/>
+          <el-input-number v-model="scope.row.resultado.duracion" />
         </template>
       </el-table-column>
     </el-table>
@@ -165,7 +165,6 @@ export default {
         element['index'] = index + 1;
       });
       this.list = data.reduce((a, c) => {
-        const w = 0;
         let arr = [];
         if (c.programacion_resultados.length > 0) {
           for (const index in c.programacion_resultados) {
@@ -176,9 +175,9 @@ export default {
                 resultado: { ...item },
                 rowspan: c.resultados_count,
                 duracion: c.programacion_resultados[index].duracion | 0,
+                rowspanDuracion: c.programacion_resultados[index].duracion !== null ? c.programacion_resultados[index].resultados_count : 0,
                 selected: c.programacion_resultados[index].duracion !== null,
                 almacenado: c.programacion_resultados[index].duracion !== null,
-                rowspanDuracion: c.programacion_resultados[index].duracion !== null ? c.programacion_resultados[index].resultados_count : 1,
                 inicio: a.length ? a[a.length - 1].fin : 0,
                 fin: a.length ? a[a.length - 1].fin + c.programacion_resultados[index].resultados.length : c.programacion_resultados[index].resultados.length,
               })));
@@ -187,7 +186,9 @@ export default {
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: {},
                 rowspan: 1,
-                rowspanDuracion: w,
+                rowspanDuracion: 0,
+                selected: false,
+                almacenado: false,
                 inicio: a.length ? a[a.length - 1].fin : 0,
                 fin: a.length ? a[a.length - 1].fin : 0,
               }]);
@@ -368,7 +369,7 @@ export default {
       const preSorted = arr.slice(0, start), postSorted = arr.slice(end);
       const sorted = arr.slice(start, end).sort((a, b) => {
         if (a.selected) {
-          return -1;
+          return 1;
         }
         return 0;
       });
