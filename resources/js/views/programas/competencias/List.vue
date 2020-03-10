@@ -164,16 +164,14 @@ export default {
           for (const index in c.programacion_resultados) {
             console.log(c.programacion_resultados[index]);
             if (c.programacion_resultados[index].resultados.length > 0) {
-              for (const index2 in c.programacion_resultados[index].resultados) {
-                arr = arr.concat(c.programacion_resultados[index].resultados[index2].map(item => ({
-                  competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
-                  resultado: { ...item },
-                  rowspan: c.resultados_count,
-                  rowspanDuracion: w,
-                  inicio: a.length ? a[a.length - 1].fin : 0,
-                  fin: a.length ? a[a.length - 1].fin + c.programacion_resultados[index].resultados.length : c.programacion_resultados[index].resultados.length,
-                })));
-              }
+              arr = arr.concat(c.programacion_resultados[index].resultados.map(item => ({
+                competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
+                resultado: { ...item },
+                rowspan: c.resultados_count,
+                rowspanDuracion: w,
+                inicio: a.length ? a[a.length - 1].fin : 0,
+                fin: a.length ? a[a.length - 1].fin + c.programacion_resultados[index].resultados.length : c.programacion_resultados[index].resultados.length,
+              })));
             } else {
               arr = arr.concat([{
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
