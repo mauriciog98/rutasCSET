@@ -19,6 +19,7 @@ class ProgramacionResultadoResource extends JsonResource
                 $item->programado = true;
                 return $item;
             })),
+            'resultados_count' => count($this->resultados),
             'duracion' => $this->duracion,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
