@@ -369,9 +369,12 @@ export default {
       const preSorted = arr.slice(0, start), postSorted = arr.slice(end);
       const sorted = arr.slice(start, end).sort((a, b) => {
         if (a.selected) {
-          return 1;
+          if (b.selected) {
+            return 0;
+          }
+          return -1;
         }
-        return 0;
+        return 1;
       });
       arr.length = 0;
       arr.push.apply(arr, preSorted.concat(sorted).concat(postSorted));
