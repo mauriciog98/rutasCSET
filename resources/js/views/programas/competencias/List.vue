@@ -40,11 +40,11 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="Tiempo Ejecución (horas)">
-        <template v-if="scope.row.resultado.duracion" slot-scope="scope">
-          <span>{{ scope.row.resultado.duracion }}</span>
+        <template v-if="scope.row.duracion" slot-scope="scope">
+          <span>{{ scope.row.duracion }}</span>
         </template>
-        <template v-if="scope.row.resultado.editing || (!scope.row.resultado.duracion && scope.row.resultado.selected)" slot-scope="scope">
-          <el-input-number v-model="scope.row.resultado.duracion" />
+        <template v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)" slot-scope="scope">
+          <el-input-number v-model="scope.row.duracion" />
         </template>
       </el-table-column>
     </el-table>
