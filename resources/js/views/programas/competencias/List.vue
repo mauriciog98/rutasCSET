@@ -326,9 +326,11 @@ export default {
       let arreglo = this.list;
       if (row.selected) {
         row.selected = false;
+        row.editing = false;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion - 1;
         if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected) {
           arreglo[row.inicio + 1].rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
+          arreglo[row.inicio].rowspanDuracion = 0;
         }
       } else {
         row.selected = true;
