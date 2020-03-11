@@ -327,6 +327,9 @@ export default {
       if (row.selected) {
         row.selected = false;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion - 1;
+        if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected) {
+          arreglo[row.inicio + 1].rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
+        }
       } else {
         row.selected = true;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion + 1;
