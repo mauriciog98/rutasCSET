@@ -40,11 +40,11 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="Tiempo Ejecución (horas)">
-        <template v-if="scope.row.duracion" slot-scope="scope">
-          <span>{{ scope.row.duracion }}</span>
-        </template>
         <template v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)" slot-scope="scope">
-          <el-input-number v-model="scope.row.duracion" />
+          <el-input-number v-model="scope.row.duracion" @change="inputEditing(scope.row)" />
+        </template>
+        <template v-else slot-scope="scope">
+          <span>{{ scope.row.duracion }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -244,6 +244,9 @@ export default {
     },
     doToggle(){
       this.$refs.competenciaTable.toggleAllSelection();
+    },
+    inputEditing(row){
+      row.editing = true;
     },
     canSelectRow(row, index) {
       if (row.resultado.id === undefined){
