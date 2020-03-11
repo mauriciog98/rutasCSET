@@ -26,6 +26,7 @@
       style="width: 100%"
       :span-method="objectSpanMethod"
       @select="handleSelectionChange"
+      select-on-indeterminate="false"
     >
       <el-table-column align="center" label="Competencia">
         <template slot-scope="scope">
