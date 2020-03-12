@@ -72,7 +72,7 @@
       </el-table-column>
       <el-table-column align="center" label="Tiempo Ejecución (horas)">
         <template v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)" slot-scope="scope">
-          <el-input-number v-model="scope.row.duracion" min="0" @change="inputEditing(scope.row)" />
+          <el-input-number v-model="scope.row.duracion" :min="0" @change="inputEditing(scope.row)" />
         </template>
         <template v-else slot-scope="scope">
           <span>{{ scope.row.duracion }}</span>
