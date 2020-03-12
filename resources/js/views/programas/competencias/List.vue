@@ -264,7 +264,7 @@ export default {
       }, []);
       this.loading = false;
     },
-    tableRowClassName({row, rowIndex}) {
+    tableRowClassName(row, rowIndex) {
       if (row.almacenado) {
         return 'success-row';
       }
