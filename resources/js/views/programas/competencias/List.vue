@@ -26,7 +26,6 @@
       style="width: 100%"
       :span-method="objectSpanMethod"
       @select="handleSelectionChange"
-      select-on-indeterminate="false"
     >
       <el-table-column align="center" label="Competencia">
         <template slot-scope="scope">
@@ -34,7 +33,7 @@
           <el-button type="primary" size="small" icon="el-icon-plus" @click="handleNewResultado(scope.row.competencia.id)" />
         </template>
       </el-table-column>
-      <el-table-column property="orden" type="selection" align="center" :selectable="canSelectRow" />
+      <el-table-column property="orden" type="selection" align="center" :selectable="canSelectRow" he/>
       <el-table-column label="Resultados" header-align="center">
         <template v-if="scope.row.resultado.codigo" slot-scope="scope">
           <span>{{ scope.row.resultado.codigo + ' - ' + scope.row.resultado.nombre }}</span>
@@ -326,15 +325,16 @@ export default {
     handleSelectionChange(val, row) {
       let arreglo = this.list;
       if (row.selected) {
-        row.selected = false;
-        row.editing = false;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion - 1;
         if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected) {
           arreglo[row.inicio + 1].rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
           arreglo[row.inicio + 1].duracion = arreglo[row.inicio].duracion;
           arreglo[row.inicio + 1].editing = true;
-          arreglo[row.inicio].rowspanDuracion = 0;
         }
+        row.rowspanDuracion = 0;
+        row.duracion = 0;
+        row.selected = false;
+        row.editing = false;
       } else {
         row.selected = true;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion + 1;
