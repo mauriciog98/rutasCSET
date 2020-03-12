@@ -29,7 +29,7 @@ class Competencia extends Model
         $resultadoIds = $duracionResultado->pluck('resultado')->collapse();
         $noProgramados = new DuracionResultado();
         $noProgramados->resultado = $this->resultados()->whereNotIn('id', $resultadoIds)->get()->pluck('id');
-        return $duracionResultado->push($noProgramados) ;
+        return $duracionResultado->push($noProgramados);
     }
 
     protected $fillable = [
