@@ -44,6 +44,7 @@
       fit
       highlight-current-row
       style="width: 100%"
+      :row-class-name="tableRowClassName"
       @select="handleSelectionChange"
     >
       <el-table-column align="center" label="Competencia">
@@ -62,30 +63,32 @@
         align="center"
         label-class-name="hide"
         prop="selected"
-        type="selection"/>
+        type="selection"
+      />
       <el-table-column header-align="center" label="Resultados">
-        <template slot-scope="scope" v-if="scope.row.resultado.codigo">
+        <template v-if="scope.row.resultado.codigo" slot-scope="scope">
           <span>{{ scope.row.resultado.codigo + ' - ' + scope.row.resultado.nombre }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="Tiempo Ejecución (horas)">
-        <template slot-scope="scope" v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)">
-          <el-input-number @change="inputEditing(scope.row)" v-model="scope.row.duracion"/>
+        <template v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)" slot-scope="scope">
+          <el-input-number v-model="scope.row.duracion" @change="inputEditing(scope.row)" min="0"/>
         </template>
-        <template slot-scope="scope" v-else>
+        <template v-else slot-scope="scope">
           <span>{{ scope.row.duracion }}</span>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog :title="'Crear competencia'" :visible.sync="dialogFormVisible">
-      <div class="form-container" v-loading="competenciaCreating">
+      <div v-loading="competenciaCreating" class="form-container">
         <el-form
+          ref="competenciaForm"
           :model="newCompetencia"
           :rules="rules"
-          ref="competenciaForm"
           label-position="left"
           label-width="150px"
-          style="max-width: 500px;">
+          style="max-width: 500px;"
+        >
           <el-form-item :label="'Codigo'" prop="codigo">
             <el-input v-model="newCompetencia.codigo" />
           </el-form-item>
@@ -93,7 +96,7 @@
             <el-input v-model="newCompetencia.nombre" />
           </el-form-item>
           <el-form-item :label="'Tipo competencia'" prop="nivel_formacion_id">
-            <el-select class="filter-item" placeholder="Seleccione un nivel de formación" v-model="newCompetencia.tipo">
+            <el-select v-model="newCompetencia.tipo" class="filter-item" placeholder="Seleccione un nivel de formación">
               <el-option
                 v-for="item in tipoCompetencia"
                 :key="item.id"
@@ -260,6 +263,12 @@ export default {
         return a;
       }, []);
       this.loading = false;
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (row.almacenado) {
+        return 'success-row';
+      }
+      return '';
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -519,5 +528,14 @@ export default {
     .clear-left {
       clear: left;
     }
+  }
+</style>
+<style>
+  .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
   }
 </style>
