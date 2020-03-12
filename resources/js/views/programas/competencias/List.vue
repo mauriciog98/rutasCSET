@@ -33,7 +33,7 @@
           <el-button type="primary" size="small" icon="el-icon-plus" @click="handleNewResultado(scope.row.competencia.id)" />
         </template>
       </el-table-column>
-      <el-table-column property="orden" type="selection" align="center" :selectable="canSelectRow" he/>
+      <el-table-column prop="selected" type="selection" align="center" :selectable="canSelectRow" label-class-name="hide"/>
       <el-table-column label="Resultados" header-align="center">
         <template v-if="scope.row.resultado.codigo" slot-scope="scope">
           <span>{{ scope.row.resultado.codigo + ' - ' + scope.row.resultado.nombre }}</span>
@@ -428,6 +428,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .hide label {
+    visibility: hidden
+  }
 .edit-input {
   padding-right: 100px;
 }
