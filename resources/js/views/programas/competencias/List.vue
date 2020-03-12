@@ -76,7 +76,7 @@
             v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)"
             v-model="scope.row.duracion"
             controls-position="right"
-            size="medium"
+            size="small"
             :min="0"
             @change="inputEditing(scope.row)"
           />
