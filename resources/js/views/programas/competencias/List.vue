@@ -2,55 +2,59 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
+        v-model="query.keyword"
         :placeholder="$t('table.keyword')"
-        @keyup.enter.native="handleFilter"
         class="filter-item"
         style="width: 200px;"
-        v-model="query.keyword"/>
-      <el-button @click="handleFilter" class="filter-item" icon="el-icon-search" type="primary" v-waves>
+        @keyup.enter.native="handleFilter"
+      />
+      <el-button v-waves class="filter-item" icon="el-icon-search" type="primary" @click="handleFilter">
         Buscar
       </el-button>
       <el-button
-        @click="handleCreate"
+        type="primary"
         class="filter-item"
         icon="el-icon-plus"
         style="margin-left: 10px;"
-        type="primary">
+        @click="handleCreate"
+      >
         Agregar
       </el-button>
       <el-button
+        v-waves
         :loading="downloading"
-        @click="handleDownload"
         class="filter-item"
         icon="el-icon-download"
         type="primary"
-        v-waves>
+        @click="handleDownload"
+      >
         Exportar
       </el-button>
-      <el-button @click="doToggle" class="filter-item" icon="el-icon-download" type="primary" v-waves>
+      <el-button v-waves class="filter-item" icon="el-icon-download" type="primary" @click="doToggle">
         Exportar
       </el-button>
     </div>
 
     <el-table
+      ref="competenciaTable"
+      v-loading="loading"
       :data="list"
       :span-method="objectSpanMethod"
-      @select="handleSelectionChange"
       border
       fit
       highlight-current-row
-      ref="competenciaTable"
       style="width: 100%"
-      v-loading="loading"
+      @select="handleSelectionChange"
     >
       <el-table-column align="center" label="Competencia">
         <template slot-scope="scope">
           <span>{{ scope.row.competencia.codigo + ' - ' + scope.row.competencia.nombre }}</span><br>
           <el-button
-            @click="handleNewResultado(scope.row.competencia.id)"
             icon="el-icon-plus"
             size="small"
-            type="primary"/>
+            type="primary"
+            @click="handleNewResultado(scope.row.competencia.id)"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -78,57 +82,59 @@
         <el-form
           :model="newCompetencia"
           :rules="rules"
+          ref="competenciaForm"
           label-position="left"
           label-width="150px"
-          ref="competenciaForm"
           style="max-width: 500px;">
           <el-form-item :label="'Codigo'" prop="codigo">
-            <el-input v-model="newCompetencia.codigo"/>
+            <el-input v-model="newCompetencia.codigo" />
           </el-form-item>
           <el-form-item :label="'Nombre'" prop="nombre">
-            <el-input v-model="newCompetencia.nombre"/>
+            <el-input v-model="newCompetencia.nombre" />
           </el-form-item>
           <el-form-item :label="'Tipo competencia'" prop="nivel_formacion_id">
             <el-select class="filter-item" placeholder="Seleccione un nivel de formación" v-model="newCompetencia.tipo">
               <el-option
+                v-for="item in tipoCompetencia"
                 :key="item.id"
                 :label="item.nombre | uppercaseFirst"
                 :value="item.id"
-                v-for="item in tipoCompetencia"/>
+              />
             </el-select>
           </el-form-item>
         </el-form>
-        <div class="dialog-footer" slot="footer">
+        <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button @click="createCompetencia()" type="primary">
+          <el-button type="primary" @click="createCompetencia()">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
       </div>
     </el-dialog>
     <el-dialog :title="'Crear resultado'" :visible.sync="dialogResultadoVisible">
-      <div class="form-container" v-loading="resultadoCreating">
+      <div v-loading="resultadoCreating" class="form-container">
         <el-form
+          ref="resultadoForm"
           :model="newResultado"
           :rules="rulesResultado"
           label-position="left"
           label-width="150px"
-          ref="resultadoForm"
-          style="max-width: 500px;">
+          style="max-width: 500px;"
+        >
           <el-form-item :label="'Codigo'" prop="codigo">
-            <el-input v-model="newResultado.codigo"/>
+            <el-input v-model="newResultado.codigo" />
           </el-form-item>
           <el-form-item :label="'Nombre'" prop="nombre">
-            <el-input v-model="newResultado.nombre"/>
+            <el-input v-model="newResultado.nombre" />
           </el-form-item>
         </el-form>
-        <div class="dialog-footer" slot="footer">
+        <div slot="footer" class="dialog-footer">
           <el-button @click="dialogResultadoVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button @click="createResultado()" type="primary">
+          <el-button type="primary" @click="createResultado()">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
