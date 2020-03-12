@@ -428,9 +428,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .hide label {
-    visibility: hidden
-  }
 .edit-input {
   padding-right: 100px;
 }
