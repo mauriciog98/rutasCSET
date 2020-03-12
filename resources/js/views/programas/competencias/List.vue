@@ -387,7 +387,7 @@ export default {
       let arreglo = this.list;
       if (row.selected) {
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion - 1;
-        if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected) {
+        if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected && !arreglo[row.inicio + 1].almacenado) {
           arreglo[row.inicio + 1].rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
           arreglo[row.inicio + 1].duracion = arreglo[row.inicio].duracion;
           arreglo[row.inicio + 1].editing = true;
