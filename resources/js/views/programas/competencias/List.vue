@@ -1,93 +1,134 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="query.keyword" :placeholder="$t('table.keyword')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-input
+        :placeholder="$t('table.keyword')"
+        @keyup.enter.native="handleFilter"
+        class="filter-item"
+        style="width: 200px;"
+        v-model="query.keyword"/>
+      <el-button @click="handleFilter" class="filter-item" icon="el-icon-search" type="primary" v-waves>
         Buscar
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button
+        @click="handleCreate"
+        class="filter-item"
+        icon="el-icon-plus"
+        style="margin-left: 10px;"
+        type="primary">
         Agregar
       </el-button>
-      <el-button v-waves :loading="downloading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button
+        :loading="downloading"
+        @click="handleDownload"
+        class="filter-item"
+        icon="el-icon-download"
+        type="primary"
+        v-waves>
         Exportar
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-download" @click="doToggle">
+      <el-button @click="doToggle" class="filter-item" icon="el-icon-download" type="primary" v-waves>
         Exportar
       </el-button>
     </div>
 
     <el-table
-      ref="competenciaTable"
-      v-loading="loading"
       :data="list"
+      :span-method="objectSpanMethod"
+      @select="handleSelectionChange"
       border
       fit
       highlight-current-row
+      ref="competenciaTable"
       style="width: 100%"
-      :span-method="objectSpanMethod"
-      @select="handleSelectionChange"
+      v-loading="loading"
     >
       <el-table-column align="center" label="Competencia">
         <template slot-scope="scope">
           <span>{{ scope.row.competencia.codigo + ' - ' + scope.row.competencia.nombre }}</span><br>
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleNewResultado(scope.row.competencia.id)" />
+          <el-button
+            @click="handleNewResultado(scope.row.competencia.id)"
+            icon="el-icon-plus"
+            size="small"
+            type="primary"/>
         </template>
       </el-table-column>
-      <el-table-column prop="selected" type="selection" align="center" :selectable="canSelectRow" label-class-name="hide"/>
-      <el-table-column label="Resultados" header-align="center">
-        <template v-if="scope.row.resultado.codigo" slot-scope="scope">
+      <el-table-column
+        :selectable="canSelectRow"
+        align="center"
+        label-class-name="hide"
+        prop="selected"
+        type="selection"/>
+      <el-table-column header-align="center" label="Resultados">
+        <template slot-scope="scope" v-if="scope.row.resultado.codigo">
           <span>{{ scope.row.resultado.codigo + ' - ' + scope.row.resultado.nombre }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="Tiempo Ejecución (horas)">
-        <template v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)" slot-scope="scope">
-          <el-input-number v-model="scope.row.duracion" @change="inputEditing(scope.row)" />
+        <template slot-scope="scope" v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)">
+          <el-input-number @change="inputEditing(scope.row)" v-model="scope.row.duracion"/>
         </template>
-        <template v-else slot-scope="scope">
+        <template slot-scope="scope" v-else>
           <span>{{ scope.row.duracion }}</span>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog :title="'Crear competencia'" :visible.sync="dialogFormVisible">
-      <div v-loading="competenciaCreating" class="form-container">
-        <el-form ref="competenciaForm" :rules="rules" :model="newCompetencia" label-position="left" label-width="150px" style="max-width: 500px;">
+      <div class="form-container" v-loading="competenciaCreating">
+        <el-form
+          :model="newCompetencia"
+          :rules="rules"
+          label-position="left"
+          label-width="150px"
+          ref="competenciaForm"
+          style="max-width: 500px;">
           <el-form-item :label="'Codigo'" prop="codigo">
-            <el-input v-model="newCompetencia.codigo" />
+            <el-input v-model="newCompetencia.codigo"/>
           </el-form-item>
           <el-form-item :label="'Nombre'" prop="nombre">
-            <el-input v-model="newCompetencia.nombre" />
+            <el-input v-model="newCompetencia.nombre"/>
           </el-form-item>
           <el-form-item :label="'Tipo competencia'" prop="nivel_formacion_id">
-            <el-select v-model="newCompetencia.tipo" class="filter-item" placeholder="Seleccione un nivel de formación">
-              <el-option v-for="item in tipoCompetencia" :key="item.id" :label="item.nombre | uppercaseFirst" :value="item.id" />
+            <el-select class="filter-item" placeholder="Seleccione un nivel de formación" v-model="newCompetencia.tipo">
+              <el-option
+                :key="item.id"
+                :label="item.nombre | uppercaseFirst"
+                :value="item.id"
+                v-for="item in tipoCompetencia"/>
             </el-select>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div class="dialog-footer" slot="footer">
           <el-button @click="dialogFormVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button type="primary" @click="createCompetencia()">
+          <el-button @click="createCompetencia()" type="primary">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
       </div>
     </el-dialog>
     <el-dialog :title="'Crear resultado'" :visible.sync="dialogResultadoVisible">
-      <div v-loading="resultadoCreating" class="form-container">
-        <el-form ref="resultadoForm" :rules="rulesResultado" :model="newResultado" label-position="left" label-width="150px" style="max-width: 500px;">
+      <div class="form-container" v-loading="resultadoCreating">
+        <el-form
+          :model="newResultado"
+          :rules="rulesResultado"
+          label-position="left"
+          label-width="150px"
+          ref="resultadoForm"
+          style="max-width: 500px;">
           <el-form-item :label="'Codigo'" prop="codigo">
-            <el-input v-model="newResultado.codigo" />
+            <el-input v-model="newResultado.codigo"/>
           </el-form-item>
           <el-form-item :label="'Nombre'" prop="nombre">
-            <el-input v-model="newResultado.nombre" />
+            <el-input v-model="newResultado.nombre"/>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div class="dialog-footer" slot="footer">
           <el-button @click="dialogResultadoVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button type="primary" @click="createResultado()">
+          <el-button @click="createResultado()" type="primary">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
@@ -168,6 +209,20 @@ export default {
         let arr = [];
         if (c.programacion_resultados.length > 0) {
           for (const index in c.programacion_resultados) {
+            let inicio = 0;
+            let fin = 0;
+            if (arr.length) {
+              inicio = arr[arr.length - 1].fin;
+              fin = inicio + c.programacion_resultados[index].resultados_count;
+            } else {
+              if (a.length) {
+                inicio = a[a.length - 1].fin;
+                fin = inicio + c.programacion_resultados[index].resultados_count;
+              } else {
+                inicio = 0;
+                fin = c.programacion_resultados[index].resultados_count;
+              }
+            }
             console.log(c.programacion_resultados[index]);
             if (c.programacion_resultados[index].resultados.length > 0) {
               arr = arr.concat(c.programacion_resultados[index].resultados.map(item => ({
@@ -178,8 +233,8 @@ export default {
                 rowspanDuracion: c.programacion_resultados[index].duracion !== null ? c.programacion_resultados[index].resultados_count : 0,
                 selected: c.programacion_resultados[index].duracion !== null,
                 almacenado: c.programacion_resultados[index].duracion !== null,
-                inicio: a.length ? a[a.length - 1].fin : 0,
-                fin: a.length ? a[a.length - 1].fin + c.programacion_resultados[index].resultados.length : c.programacion_resultados[index].resultados.length,
+                inicio: inicio,
+                fin: fin,
               })));
             } else {
               arr = arr.concat([{
@@ -242,14 +297,14 @@ export default {
         };
       }
     },
-    doToggle(){
+    doToggle() {
       this.$refs.competenciaTable.toggleAllSelection();
     },
-    inputEditing(row){
+    inputEditing(row) {
       row.editing = true;
     },
     canSelectRow(row, index) {
-      if (row.resultado.id === undefined){
+      if (row.resultado.id === undefined) {
         return false;
       }
       return !row.almacenado;
@@ -428,30 +483,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.edit-input {
-  padding-right: 100px;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
-.dialog-footer {
-  text-align: left;
-  padding-top: 0;
-  margin-left: 150px;
-}
-.app-container {
-  flex: 1;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-  .block {
-    float: left;
-    min-width: 250px;
+  .edit-input {
+    padding-right: 100px;
   }
-  .clear-left {
-    clear: left;
+
+  .cancel-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
   }
-}
+
+  .dialog-footer {
+    text-align: left;
+    padding-top: 0;
+    margin-left: 150px;
+  }
+
+  .app-container {
+    flex: 1;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+
+    .block {
+      float: left;
+      min-width: 250px;
+    }
+
+    .clear-left {
+      clear: left;
+    }
+  }
 </style>
