@@ -8,7 +8,11 @@
 .pull-right {
     float: right !important;
 }
-
+.hide {
+  label {
+    visibility: hidden;
+  }
+}
 .permissions-container {
   .block {
     .el-form-item__label {
