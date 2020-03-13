@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedVariable -->
 <template>
   <div class="app-container">
     <div class="filter-container">
@@ -72,15 +73,21 @@
       </el-table-column>
       <el-table-column align="center" label="Tiempo Ejecución (horas)">
         <template slot-scope="scope">
-          <el-input-number
-            v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)"
-            v-model="scope.row.duracion"
-            controls-position="right"
-            size="small"
-            :min="0"
-            @change="inputEditing(scope.row)"
-          />
-          <span v-else>{{ scope.row.duracion }}</span>
+          <div v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)">
+            <el-input-number
+              v-model="scope.row.duracion"
+              controls-position="right"
+              size="small"
+              :min="0"
+              @change="inputEditing(scope.row)"
+            />
+            <el-button type="danger" icon="el-icon-close" circle title="cancelar" @click="scope.row.editing = true" />
+            <el-button type="success" icon="el-icon-check" circle title="guardar" />
+          </div>
+          <div v-else>
+            <span>{{ scope.row.duracion }}</span>
+            <el-button type="primary" icon="el-icon-edit" circle title="editar" @click="scope.row.editing = true" />
+          </div>
         </template>
       </el-table-column>
     </el-table>
