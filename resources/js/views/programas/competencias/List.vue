@@ -31,9 +31,6 @@
       >
         Exportar
       </el-button>
-      <el-button v-waves class="filter-item" icon="el-icon-download" type="primary" @click="doToggle">
-        Exportar
-      </el-button>
     </div>
 
     <el-table
@@ -329,7 +326,7 @@ export default {
       }
     },
     handleCancelEdit(row) {
-      row.editing = false;
+      this.$set(row, 'editing', false);
       row.duracion = row.oldValue | row.duracion;
       row.oldValue = undefined;
     },
