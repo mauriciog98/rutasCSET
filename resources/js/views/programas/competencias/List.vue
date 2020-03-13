@@ -329,7 +329,7 @@ export default {
       this.$set(row, 'editing', false);
       row.duracion = row.oldValue | row.duracion;
       row.oldValue = undefined;
-      this.$refs.competenciaTable.setCurrentRow();
+      this.$refs.competenciaTable.setCurrentRow(row);
     },
     inputEditing(row, newValue, oldValue) {
       row.editing = true;
