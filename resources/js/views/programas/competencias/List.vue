@@ -330,11 +330,12 @@ export default {
     },
     handleCancelEdit(row) {
       row.editing = false;
-      row.duracion = row.oldValue;
+      row.duracion = row.oldValue | row.oldValue;
+      row.oldValue = undefined;
     },
     inputEditing(row, newValue, oldValue) {
       row.editing = true;
-      if (newValue) {
+      if (newValue && row.oldValue !== undefined) {
         row.oldValue = oldValue;
       }
     },
