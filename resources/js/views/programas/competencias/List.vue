@@ -1,4 +1,4 @@
-<!--suppress JSUnresolvedVariable -->
+<!--suppress JSUnresolvedVariable, JSUnfilteredForInLoop -->
 <template>
   <div class="app-container">
     <div class="filter-container">
@@ -79,17 +79,17 @@
               controls-position="right"
               size="small"
               :min="0"
-              @change="inputEditing(scope.row)"
+              @change="inputEditing(scope.row, ...arguments)"
             />
             <el-button-group>
-              <el-button type="danger" size="small" icon="el-icon-close" circle title="cancelar" @click="scope.row.editing = true" />
+              <el-button type="danger" size="small" icon="el-icon-close" circle title="cancelar" @click="handleCancelEdit(row)" />
               <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" />
             </el-button-group>
           </div>
           <div v-else>
             <span>{{ scope.row.duracion }}</span>
-            <el-button-group>
-              <el-button type="primary" size="small" icon="el-icon-edit" circle title="editar" @click="scope.row.editing = true" />
+            <el-button-group v-if="scope.row.almacenado" class="right">
+              <el-button type="primary" size="small" icon="el-icon-edit" circle title="editar" @click="inputEditing(scope.row)" />
             </el-button-group>
           </div>
         </template>
@@ -328,11 +328,15 @@ export default {
         };
       }
     },
-    doToggle() {
-      this.$refs.competenciaTable.toggleAllSelection();
+    handleCancelEdit(row) {
+      row.editing = false;
+      row.duracion = row.oldValue;
     },
-    inputEditing(row) {
+    inputEditing(row, newValue, oldValue) {
       row.editing = true;
+      if (newValue) {
+        row.oldValue = oldValue;
+      }
     },
     canSelectRow(row, index) {
       if (row.resultado.id === undefined) {
