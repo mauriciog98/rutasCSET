@@ -81,12 +81,16 @@
               :min="0"
               @change="inputEditing(scope.row)"
             />
-            <el-button type="danger" icon="el-icon-close" circle title="cancelar" @click="scope.row.editing = true" />
-            <el-button type="success" icon="el-icon-check" circle title="guardar" />
+            <el-button-group>
+              <el-button type="danger" size="small" icon="el-icon-close" circle title="cancelar" @click="scope.row.editing = true" />
+              <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" />
+            </el-button-group>
           </div>
           <div v-else>
             <span>{{ scope.row.duracion }}</span>
-            <el-button type="primary" icon="el-icon-edit" circle title="editar" @click="scope.row.editing = true" />
+            <el-button-group>
+              <el-button type="primary" size="small" icon="el-icon-edit" circle title="editar" @click="scope.row.editing = true" />
+            </el-button-group>
           </div>
         </template>
       </el-table-column>
