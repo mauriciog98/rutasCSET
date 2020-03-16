@@ -17,6 +17,7 @@ class ProgramacionResultadoResource extends JsonResource
         return [
             'id' => $this->id,
             'resultados' => ResultadoResource::collection($this->resultados),
+            'resultado' => $this->resultado,
             'resultados_count' => $this->resultados_count,
             'duracion' => $this->duracion,
             'created_at' => $this->created_at,

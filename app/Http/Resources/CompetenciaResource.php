@@ -20,7 +20,6 @@ class CompetenciaResource extends JsonResource
             'codigo' => $this->codigo,
             'tipo' => $this->tipo,
             'resultados' => ResultadoResource::collection($this->whenLoaded('resultados')),
-            'resultado' => $this->resultado,
             'programa' => new ProgramaResource($this->whenLoaded('programa')),
             'duracionResultados' => DuracionResultadoResource::collection($this->whenLoaded('duracionResultados')),
             'programacion_resultados' => ProgramacionResultadoResource::collection($this->programacion_resultados),
