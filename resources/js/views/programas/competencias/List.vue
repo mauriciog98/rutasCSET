@@ -252,6 +252,7 @@ export default {
               arr = arr.concat(c.programacion_resultados[index].resultados.map(item => ({
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: { ...item },
+                resultados: c.programacion_resultados[index].resultado,
                 rowspan: c.resultados_count,
                 duracion: c.programacion_resultados[index].duracion | 0,
                 duracion_id: c.programacion_resultados[index].id,
@@ -265,6 +266,7 @@ export default {
               arr = arr.concat([{
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: {},
+                resultados: [],
                 rowspan: 1,
                 duracion: 0,
                 duracion_id: null,
@@ -452,7 +454,7 @@ export default {
       } else {
         row.selected = true;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion + 1;
-        arreglo[row.inicio].resultados = arreglo[row.inicio].resultados.length ? [row.resultado.id, ...arreglo[row.inicio].resultados] : [];
+        arreglo[row.inicio].resultados = arreglo[row.inicio].resultados.length ? [row.resultado.id, ...arreglo[row.inicio].resultados] : [row.resultado.id];
       }
       arreglo = this.partialSort(arreglo, row.inicio, row.fin);
       this.loading = true;
