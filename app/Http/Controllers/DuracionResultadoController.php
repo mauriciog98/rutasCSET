@@ -39,7 +39,7 @@ class DuracionResultadoController extends Controller
         $duracion = DuracionResultado::findOrNew($request->get('duracion_id'));
         $duracion->resultado = $request->get('resultados');
         $duracion->duracion = $request->get('duracion');
-        $duracion->competencia_id = $request->get('competencia.id');
+        $duracion->competencia_id = $request->input('competencia.id');
         $duracion->save();
         return new DuracionResultadoResource($duracion);
     }
