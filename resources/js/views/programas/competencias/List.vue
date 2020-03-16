@@ -80,7 +80,7 @@
             />
             <el-button-group>
               <el-button type="danger" size="small" icon="el-icon-close" circle title="cancelar" @click="handleCancelEdit(scope.row)" />
-              <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" @click="createDuracion(scope.row)"/>
+              <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" @click="createDuracion(scope.row)" />
             </el-button-group>
           </div>
           <div v-else>

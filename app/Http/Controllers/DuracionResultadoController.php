@@ -31,13 +31,13 @@ class DuracionResultadoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return DuracionResultadoResource
      */
     public function store(Request $request)
     {
         $duracion = DuracionResultado::findOrNew($request->get('duracion_id'));
-        $duracion->resultados = $request->get('resultados');
+        $duracion->resultado = $request->get('resultados');
         $duracion->duracion = $request->get('duracion');
         $duracion->competend = $request->get('competencia.id');
         $duracion->save();
