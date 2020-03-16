@@ -27,9 +27,14 @@ class Competencia extends Model
     {
         $duracionResultado = $this->duracionResultado()->get();
         $resultadoIds = $duracionResultado->pluck('resultado')->collapse();
-        $noProgramados = new DuracionResultado();
-        $noProgramados->resultado = $this->resultados()->whereNotIn('id', $resultadoIds)->get()->pluck('id');
-        return $duracionResultado->push($noProgramados);
+        $resultados = $this->resultados()->whereNotIn('id', $resultadoIds)->get()->pluck('id');
+        if(count($resultados)>0){
+            $noProgramados = new DuracionResultado();
+            $noProgramados->resultado = $resultados;
+            return $duracionResultado->push($noProgramados);
+        }else{
+            return $duracionResultado;
+        }
     }
 
     protected $fillable = [
