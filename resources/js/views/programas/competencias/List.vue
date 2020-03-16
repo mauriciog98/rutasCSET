@@ -35,10 +35,10 @@
 
     <el-table
       ref="competenciaTable"
+      v-loading="loading"
       :data="list"
       :row-class-name="tableRowClassName"
       :span-method="objectSpanMethod"
-      v-loading="loading"
       border
       fit
       highlight-current-row
@@ -107,6 +107,14 @@
                 title="editar"
                 type="primary"
                 @click="inputEditing(scope.row)"
+              />
+              <el-button
+                circle
+                icon="el-icon-trash"
+                size="small"
+                title="eliminar"
+                type="danger"
+                @click="deleteDuracion(scope.row.duracion_id)"
               />
             </el-button-group>
           </div>
@@ -457,6 +465,17 @@ export default {
         .finally(() => {
           row.editing = false;
         });
+    },
+    deleteDuracion(id) {
+      duracionResultadosResource.destroy(id).then(response => {
+        this.$message({
+          type: 'success',
+          message: 'Eliminado exitosamente',
+        });
+        this.handleFilter();
+      }).catch(error => {
+        console.log(error);
+      });
     },
     handleSelectionChange(val, row) {
       let arreglo = this.list;

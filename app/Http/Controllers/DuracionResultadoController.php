@@ -81,11 +81,13 @@ class DuracionResultadoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\DuracionResultado  $duracionResultado
-     * @return \Illuminate\Http\Response
+     * @param \App\DuracionResultado $duracionResultado
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function destroy(DuracionResultado $duracionResultado)
     {
-        //
+        $duracionResultado->delete();
+        return response()->json(null, 204);
     }
 }
