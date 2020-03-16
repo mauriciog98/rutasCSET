@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DuracionResultado;
+use App\Http\Resources\DuracionResultadoResource;
 use Illuminate\Http\Request;
 
 class DuracionResultadoController extends Controller
@@ -35,7 +36,12 @@ class DuracionResultadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $duracion = DuracionResultado::findOrNew($request->get('duracion_id'));
+        $duracion->resultados = $request->get('resultados');
+        $duracion->duracion = $request->get('duracion');
+        $duracion->competend = $request->get('competencia.id');
+        $duracion->save();
+        return new DuracionResultadoResource($duracion);
     }
 
     /**

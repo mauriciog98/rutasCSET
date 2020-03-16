@@ -80,7 +80,7 @@
             />
             <el-button-group>
               <el-button type="danger" size="small" icon="el-icon-close" circle title="cancelar" @click="handleCancelEdit(scope.row)" />
-              <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" />
+              <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" @click="createDuracion(scope.row)"/>
             </el-button-group>
           </div>
           <div v-else>
@@ -165,9 +165,11 @@ import ResultadoResource from '@/api/resultado';
 import waves from '@/directive/waves'; // Waves directive
 import permission from '@/directive/permission'; // Permission directive
 import checkPermission from '@/utils/permission';
+import Resource from '@/api/resource';
 
 const competenciaResource = new CompetenciaResource();
 const resultadoResource = new ResultadoResource();
+const duracionResultadosResource = new Resource('duracion_resultados');
 
 export default {
   name: 'CompetenciaList',
@@ -252,6 +254,7 @@ export default {
                 resultado: { ...item },
                 rowspan: c.resultados_count,
                 duracion: c.programacion_resultados[index].duracion | 0,
+                duracion_id: c.programacion_resultados[index].id,
                 rowspanDuracion: c.programacion_resultados[index].duracion !== null ? c.programacion_resultados[index].resultados_count : 0,
                 selected: c.programacion_resultados[index].duracion !== null,
                 almacenado: c.programacion_resultados[index].duracion !== null,
@@ -263,6 +266,8 @@ export default {
                 competencia: { id: c.id, codigo: c.codigo, nombre: c.nombre },
                 resultado: {},
                 rowspan: 1,
+                duracion: 0,
+                duracion_id: null,
                 rowspanDuracion: 0,
                 selected: false,
                 almacenado: false,
@@ -412,12 +417,31 @@ export default {
         }
       });
     },
+    createDuracion(row){
+      duracionResultadosResource
+        .store(row)
+        .then(response => {
+          this.$message({
+            message: 'Duración asignada exitosamente',
+            type: 'success',
+            duration: 5 * 1000,
+          });
+          this.handleFilter();
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {
+          row.editing = false;
+        });
+    },
     handleSelectionChange(val, row) {
       let arreglo = this.list;
       if (row.selected) {
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion - 1;
         if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected && !arreglo[row.inicio + 1].almacenado) {
           arreglo[row.inicio + 1].rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
+          arreglo[row.inicio + 1].resultados = arreglo[row.inicio].resultados;
           arreglo[row.inicio + 1].duracion = arreglo[row.inicio].duracion;
           arreglo[row.inicio + 1].editing = true;
         }
@@ -428,8 +452,8 @@ export default {
       } else {
         row.selected = true;
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion + 1;
+        arreglo[row.inicio].resultados = arreglo[row.inicio].resultados.length ? [row.resultado.id, ...arreglo[row.inicio].resultados] : [];
       }
-      row.rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
       arreglo = this.partialSort(arreglo, row.inicio, row.fin);
       this.loading = true;
       arreglo.forEach((element, index) => {
