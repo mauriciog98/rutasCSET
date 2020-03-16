@@ -13,10 +13,10 @@
         Buscar
       </el-button>
       <el-button
-        type="primary"
         class="filter-item"
         icon="el-icon-plus"
         style="margin-left: 10px;"
+        type="primary"
         @click="handleCreate"
       >
         Agregar
@@ -35,14 +35,14 @@
 
     <el-table
       ref="competenciaTable"
-      v-loading="loading"
       :data="list"
+      :row-class-name="tableRowClassName"
       :span-method="objectSpanMethod"
+      v-loading="loading"
       border
       fit
       highlight-current-row
       style="width: 100%"
-      :row-class-name="tableRowClassName"
       @select="handleSelectionChange"
     >
       <el-table-column align="center" label="Competencia">
@@ -73,20 +73,41 @@
           <div v-if="scope.row.editing || (!scope.row.duracion && scope.row.selected)">
             <el-input-number
               v-model="scope.row.duracion"
+              :min="0"
               controls-position="right"
               size="small"
-              :min="0"
               @change="inputEditing(scope.row, ...arguments)"
             />
             <el-button-group>
-              <el-button type="danger" size="small" icon="el-icon-close" circle title="cancelar" @click="handleCancelEdit(scope.row)" />
-              <el-button type="success" size="small" icon="el-icon-check" circle title="guardar" @click="createDuracion(scope.row)" />
+              <el-button
+                circle
+                icon="el-icon-close"
+                size="small"
+                title="cancelar"
+                type="danger"
+                @click="handleCancelEdit(scope.row)"
+              />
+              <el-button
+                circle
+                icon="el-icon-check"
+                size="small"
+                title="guardar"
+                type="success"
+                @click="createDuracion(scope.row)"
+              />
             </el-button-group>
           </div>
           <div v-else>
             <span>{{ scope.row.duracion }}</span>
             <el-button-group v-if="scope.row.almacenado" class="right">
-              <el-button type="primary" size="small" icon="el-icon-edit" circle title="editar" @click="inputEditing(scope.row)" />
+              <el-button
+                circle
+                icon="el-icon-edit"
+                size="small"
+                title="editar"
+                type="primary"
+                @click="inputEditing(scope.row)"
+              />
             </el-button-group>
           </div>
         </template>
@@ -419,7 +440,7 @@ export default {
         }
       });
     },
-    createDuracion(row){
+    createDuracion(row) {
       duracionResultadosResource
         .store(row)
         .then(response => {
@@ -441,6 +462,10 @@ export default {
       let arreglo = this.list;
       if (row.selected) {
         arreglo[row.inicio].rowspanDuracion = arreglo[row.inicio].rowspanDuracion - 1;
+        arreglo[row.inicio].resultados = arreglo[row.inicio].resultados.filter(
+          function(element) {
+            return (element !== row.resultado.id);
+          });
         if (arreglo[row.inicio].resultado.id === row.resultado.id && arreglo[row.inicio + 1].selected && !arreglo[row.inicio + 1].almacenado) {
           arreglo[row.inicio + 1].rowspanDuracion = arreglo[row.inicio].rowspanDuracion;
           arreglo[row.inicio + 1].resultados = arreglo[row.inicio].resultados;
@@ -524,17 +549,17 @@ export default {
     },
     handleDownload() {
       this.downloading = true;
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['id', 'nombre'];
-        const filterVal = ['id', 'nombre'];
-        const data = this.formatJson(filterVal, this.list);
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'competencia-list',
+        import('@/vendor/Export2Excel').then(excel => {
+          const tHeader = ['id', 'nombre'];
+          const filterVal = ['id', 'nombre'];
+          const data = this.formatJson(filterVal, this.list);
+          excel.export_json_to_excel({
+            header: tHeader,
+            data,
+            filename: 'competencia-list',
+          });
+          this.downloading = false;
         });
-        this.downloading = false;
-      });
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
